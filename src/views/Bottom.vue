@@ -1,7 +1,7 @@
 <template>
     <div class="bottom">
         <div class="bottom-left">
-
+            <BottomLeft></BottomLeft>
         </div>
         <div class="bottom-target">
 
@@ -15,10 +15,12 @@
 
 <script>
 import BottomRight from '../components/BottomRight'
+import BottomLeft from '../components/BottomLeft'
 export default {
     name:'Bottom',
     components:{
-        BottomRight
+        BottomRight,
+        BottomLeft
     }
 }
 </script>
