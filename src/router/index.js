@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import MineSweeper from '../components/MineSweeper.vue'
 
 Vue.use(VueRouter)
 
@@ -10,6 +11,12 @@ Vue.use(VueRouter)
     name: 'Home',
     component: Home
   },
+  {
+    path:'/s',
+    name:'s',
+    component:MineSweeper
+  },
+  
   {
     path: '/about',
     name: 'About',
