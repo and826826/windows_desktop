@@ -10,10 +10,9 @@ export function mineSweeper(){
 mineSweeper.prototype.createShows=function (){
     for(let q=0;q<this.row;q++){
         for(let p=0;p<this.clo;p++){
-            this.show.push([q*10+p,0]);
+            this.show.push([[q,p],0]);
         }
     }
-    console.log(this.show);
 }
 
 //custom pattern
@@ -33,38 +32,51 @@ mineSweeper.prototype.patternChange=function(...a){
 
 // Random generation mine
 mineSweeper.prototype.createMines=function(){
-    this.mines=[]
+    this.mines=[];
+    let n=[];
     for(let i=0;i<this.mine;i++){
-        let j=Math.floor(Math.random()*this.clo)*10+Math.floor(Math.random()*this.row);
-        if (this.mines.includes(j)) {
+        let j=Math.floor(Math.random()*(this.clo*this.row));
+        if (n.includes(j)) {
             i=i-1;
             continue;
         }
+        n.push(j);
+        console.log(j);
         this.show[j][1]=9;
-        this.mines.push(j);
+        this.mines.push([Math.floor(j/this.row),j%this.clo]);
+
+    }
+console.log("所有的雷")
+console.log(this.mines);
+}
+//
+mineSweeper.prototype.aroundAddOne=function (show,i,j){
+    if(i>=0&&i<this.clo&&j>=0&&j<this.row){
+        if(show[i*this.clo+j][1]<9){
+            show[i*this.clo+j][1]+=1;
+        }
 
     }
 
-console.log(this.mines);
-console.log(this.show);
 }
-
 // modify the value around each mine
 mineSweeper.prototype.modify=function(){
     for(let  i of this.mines){
-        i-this.clo-1>=0?this.show[i-this.clo-1][1]=this.show[i-this.clo-1][1]+1:null;
-        i-this.clo>=0?this.show[i-this.clo][1]=this.show[i-this.clo][1]+1:null;
-        i%this.clo!=this.clo-1?this.show[i-this.clo+1][1]=this.show[i-this.clo+1][1]+1:null;
 
-        (i-1)%this.clo!=this.clo-1?this.show[i-1][1]=this.show[i-1][1]+1:null;
-        (i+1)%this.clo!=0?this.show[i+1][1]=this.show[i+1][1]+1:null;
+       console.log(i);
+       //up 
+       this.aroundAddOne(this.show,i[0]-1,i[1]-1);
+       this.aroundAddOne(this.show,i[0]+1,i[1]-1);
+       this.aroundAddOne(this.show,i[0],i[1]-1);
+       //down
+       this.aroundAddOne(this.show,i[0]+1,i[1]+1);
+       this.aroundAddOne(this.show,i[0],i[1]+1);
+       this.aroundAddOne(this.show,i[0]-1,i[1]+1);
+       //
+       this.aroundAddOne(this.show,i[0]-1,i[1]);
+       this.aroundAddOne(this.show,i[0]+1,i[1]);
 
-        ((i+this.clo-1)<this.clo*this.row&&(i+this.clo-1)%(this.clo)!=this.clo-1)?this.show[i+this.clo-1][1]=this.show[i+this.clo-1][1]+1:null;
-        (i+this.clo)<this.clo*this.row?this.show[i+this.clo][1]=this.show[i+this.clo][1]+1:null;
-        ((i+this.clo)<this.clo*this.row)&&(i+this.clo+1)%this.clo!=0?this.show[i+this.clo+1][1]=this.show[i+this.clo+1][1]+1:null;
-        
 
     }
     console.log(this.show)
 }
-
