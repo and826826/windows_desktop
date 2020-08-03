@@ -16,18 +16,17 @@
                         <i class="el-icon-star-off"></i>
                    
 
-            </td>
+                    </td>
                 </tr>
             </tbody>
         </table>
         <div>
-            计时器：{{timer}}s
+            已用时间：{{time}}s
         </div>
     </div>
 </template>
 
 <script>
-import {seconde} from '../api/Time/index'
 import {mineSweeper} from '../api/MineSweeper/index'
 export default {
     name:'MineSweeper',
@@ -36,23 +35,28 @@ export default {
             num:[],
             row:0,
             clo:0,
-            begin:0,
-        }
-    },
-    compute:{
-        timer:function(){
-            return setInterval(seconde(this.begin),1000);
+            timer:"",
+            time:0,
 
         }
-
     },
+    // computed:{
+    //     timer:function(){
+    //          setInterval(function(){
+    //             let now=new Date();
+    //             let t=(now-this.begin)/1000;
+    //             return t;
+    //         },1000);
+
+    //     }
+
+    // },
     
     methods:{
-        time(){
-
-
-        },
         mouse(i,j){
+            if(!this.time){
+                this.timer=setInterval(()=>{this.time=this.time+1},1000)
+            }
             console.log(i,j);
             let td=document.getElementById('table');
             let target=this.num[i*this.clo+j][1];
@@ -64,13 +68,13 @@ export default {
                 this.scanAround(i,j)
             }
             if(target==9){
-                alert("游戏失败")
+                clearInterval(this.timer);
+                this.time=0;
+                alert("游戏失败");
+
             }
             td.rows[i].cells[j].textContent=target;
             
-
-            //     td.rows[i].cells[j].textContent=this.num[(i-1)*this.clo+j-1][1];
-            //     console.log(td.rows[i-1].cells[j-1].textContent);
         },
         scanAround(i,j){
             console.log("扫描周围")
@@ -114,8 +118,6 @@ export default {
             this.num=n.show;
             this.row=n.row;
             this.clo=n.clo;
-            this.begin=new Date();
-
     }
 }
 </script>
